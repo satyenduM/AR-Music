@@ -17,19 +17,19 @@
     <img id="pianoImage" src="./assets/piano.png"/>
   </a-assets>
 
-  <a-marker name="drums" class="ar-marker" type="barcode" value="0">
+  <a-marker id="drumsMarker" type="barcode" value="0">
     <a-image src="#drumsImage" rotation="90 0 0" position="0 0 0"/>
   </a-marker>
 
-  <a-marker name="guitar" class="ar-marker" type="barcode" value="1">
+  <a-marker id="guitarMarker" type="barcode" value="1">
     <a-image src="#guitarImage" rotation="90 0 0"/>
   </a-marker>
 
-  <a-marker name="mic" class="ar-marker" type="barcode" value="2">
+  <a-marker id="micMarker" type="barcode" value="2">
     <a-image src="#micImage" rotation="90 0 0"/>
   </a-marker>
 
-  <a-marker name="piano" class="ar-marker" type="barcode" value="3">
+  <a-marker id="pianoMarker" type="barcode" value="3">
     <a-image src="#pianoImage" rotation="90 0 0"/>
   </a-marker>
 
@@ -53,29 +53,42 @@
     src: ['./audio/piano.mp3']
   });
 
-  let audioMap = {
-    'guitar': guitar,
-    'drums': drums,
-    'piano': piano,
-    'mic': mic
-  }
-
   guitar.play();
   mic.play();
   drums.play();
   piano.play();
 
   window.onload = function () {
-    let arMarkers = document.getElementsByClassName('ar-marker');
+    let guitarMarker = document.getElementById('guitarMarker');
+    guitarMarker.addEventListener('markerFound', function () {
+      guitar.mute(false);
+    });
+    guitarMarker.addEventListener('markerLost', function () {
+      guitar.mute(true);
+    });
 
-    Array.from(arMarkers).forEach(function (arMarker) {
-      let name = arMarker.getAttribute('name');
-      arMarker.addEventListener('markerFound', function () {
-        audioMap[name].mute(false);
-      });
-      arMarker.addEventListener('markerLost', function () {
-        audioMap[name].mute(true);
-      });
+    let micMarker = document.getElementById('micMarker');
+    micMarker.addEventListener('markerFound', function () {
+      mic.mute(false);
+    });
+    micMarker.addEventListener('markerLost', function () {
+      mic.mute(true);
+    });
+
+    let pianoMarker = document.getElementById('pianoMarker');
+    pianoMarker.addEventListener('markerFound', function () {
+      piano.mute(false);
+    });
+    pianoMarker.addEventListener('markerLost', function () {
+      piano.mute(true);
+    });
+
+    let drumsMarker = document.getElementById('drumsMarker');
+    drumsMarker.addEventListener('markerFound', function () {
+      drums.mute(false);
+    });
+    drumsMarker.addEventListener('markerLost', function () {
+      drums.mute(true);
     });
   }
 
